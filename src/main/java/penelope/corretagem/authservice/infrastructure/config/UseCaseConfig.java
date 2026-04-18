@@ -3,6 +3,7 @@ package penelope.corretagem.authservice.infrastructure.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import penelope.corretagem.authservice.application.usecase.auth.AuthenticateUserUseCase;
+import penelope.corretagem.authservice.application.usecase.auth.ValidateAccessTokenUseCase;
 import penelope.corretagem.authservice.application.usecase.user.GeneratePasswordResetTokenUseCase;
 import penelope.corretagem.authservice.application.usecase.user.ResetPasswordUseCase;
 import penelope.corretagem.authservice.application.usecase.user.ValidatePasswordResetTokenUseCase;
@@ -19,6 +20,11 @@ public class UseCaseConfig {
                                                            IPasswordEncoderGateway passwordEncoderGateway,
                                                            ITokenGateway tokenGateway) {
         return new AuthenticateUserUseCase(userRepository, passwordEncoderGateway, tokenGateway);
+    }
+
+    @Bean
+    public ValidateAccessTokenUseCase validateAccessTokenUseCase(ITokenGateway tokenGateway) {
+        return new ValidateAccessTokenUseCase(tokenGateway);
     }
 
     @Bean

@@ -10,8 +10,11 @@ import penelope.corretagem.authservice.application.dto.ForgotPasswordRequest;
 import penelope.corretagem.authservice.application.dto.LoginRequest;
 import penelope.corretagem.authservice.application.dto.LoginResponse;
 import penelope.corretagem.authservice.application.dto.ResetPasswordRequest;
+import penelope.corretagem.authservice.application.dto.ValidateAccessTokenRequest;
+import penelope.corretagem.authservice.application.dto.ValidateAccessTokenResponse;
 import penelope.corretagem.authservice.application.dto.ValidateTokenRequest;
 import penelope.corretagem.authservice.application.usecase.auth.AuthenticateUserUseCase;
+import penelope.corretagem.authservice.application.usecase.auth.ValidateAccessTokenUseCase;
 import penelope.corretagem.authservice.application.usecase.user.GeneratePasswordResetTokenUseCase;
 import penelope.corretagem.authservice.application.usecase.user.ResetPasswordUseCase;
 import penelope.corretagem.authservice.application.usecase.user.ValidatePasswordResetTokenUseCase;
@@ -23,15 +26,18 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticateUserUseCase authenticateUserUseCase;
+    private final ValidateAccessTokenUseCase validateAccessTokenUseCase;
     private final GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase;
     private final ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase;
     private final ResetPasswordUseCase resetPasswordUseCase;
 
     public AuthController(AuthenticateUserUseCase authenticateUserUseCase,
+                          ValidateAccessTokenUseCase validateAccessTokenUseCase,
                           GeneratePasswordResetTokenUseCase generatePasswordResetTokenUseCase,
                           ValidatePasswordResetTokenUseCase validatePasswordResetTokenUseCase,
                           ResetPasswordUseCase resetPasswordUseCase) {
         this.authenticateUserUseCase = authenticateUserUseCase;
+        this.validateAccessTokenUseCase = validateAccessTokenUseCase;
         this.generatePasswordResetTokenUseCase = generatePasswordResetTokenUseCase;
         this.validatePasswordResetTokenUseCase = validatePasswordResetTokenUseCase;
         this.resetPasswordUseCase = resetPasswordUseCase;
@@ -40,6 +46,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = authenticateUserUseCase.execute(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/validate-access-token")
+    public ResponseEntity<ValidateAccessTokenResponse> validateAccessToken(
+            @Valid @RequestBody ValidateAccessTokenRequest request) {
+        ValidateAccessTokenResponse response = validateAccessTokenUseCase.execute(request.token());
         return ResponseEntity.ok(response);
     }
 
