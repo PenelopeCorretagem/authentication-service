@@ -21,14 +21,14 @@ public class TokenGatewayAdapter implements ITokenGateway {
     private String secret;
 
     @Override
-    public String generateToken(String email, String accessLevel) {
+    public String generateToken(String email, int accessLevelCode) {
         try {
             Algorithm algorithm = buildAlgorithm();
 
             return JWT.create()
                 .withIssuer("Penelope-API")
                 .withSubject(email)
-                .withClaim("accessLevel", accessLevel)
+                .withClaim("accessLevel", accessLevelCode)
                 .withExpiresAt(generateExpirationDate())
                 .sign(algorithm);
         } catch (JWTCreationException | IllegalArgumentException exception) {
@@ -54,17 +54,17 @@ public class TokenGatewayAdapter implements ITokenGateway {
     }
 
     @Override
-    public String getAccessLevelFromToken(String token) {
+    public int getAccessLevelFromToken(String token) {
         try {
             Algorithm algorithm = buildAlgorithm();
-            String accessLevel = JWT.require(algorithm)
+            Integer accessLevel = JWT.require(algorithm)
                 .withIssuer("Penelope-API")
                 .build()
                 .verify(token)
                 .getClaim("accessLevel")
-                .asString();
+                .asInt();
 
-            if (accessLevel == null || accessLevel.isBlank()) {
+            if (accessLevel == null) {
                 throw new InvalidCredentialsException();
             }
 

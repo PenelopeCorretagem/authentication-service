@@ -2,8 +2,7 @@ package penelope.corretagem.authservice.infrastructure.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Convert;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -55,7 +54,7 @@ public class UserJpaEntity {
     private String creci;
 
     @Column(name = "nivel_acesso")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = penelope.corretagem.authservice.infrastructure.entity.converter.AccessLevelAttributeConverter.class)
     private AccessLevel accessLevel;
 
     @Column(name = "data_criacao")

@@ -20,8 +20,6 @@ public class EmailGatewayAdapter implements IEmailGateway {
 
     @Override
     public void sendPasswordResetEmail(String toEmail, String token) {
-        String resetUrl = frontendUrl + "/verificacao?token=" + token;
-        String manualUrl = frontendUrl + "/verificacao";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
@@ -29,17 +27,11 @@ public class EmailGatewayAdapter implements IEmailGateway {
 
         String emailBody = String.format(
             "Ola,\n\n" +
-                "Voce solicitou a redefinicao de sua senha.\n\n" +
-                "Clique no link abaixo para ir diretamente para a pagina de verificacao:\n" +
-                "%s\n\n" +
-                "Se o link acima nao funcionar, acesse manualmente o endereco abaixo e insira o token:\n" +
-                "%s\n\n" +
+                "Você solicitou a redefinição de sua senha.\n\n" +
                 "Codigo de verificacao: %s\n\n" +
-                "Este link e codigo expiram em 1 hora.\n\n" +
-                "Se voce nao solicitou isso, ignore este e-mail.\n\n" +
-                "Atenciosamente,\nEquipe Penelope",
-            resetUrl,
-            manualUrl,
+                "O código irá expira em 1 hora.\n\n" +
+                "Se você não solicitou isso, desconsidere este e-mail.\n\n" +
+                "Atenciosamente,\nEquipe Penélope",
             token
         );
 
