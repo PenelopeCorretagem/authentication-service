@@ -57,12 +57,24 @@ public class TokenGatewayAdapter implements ITokenGateway {
     public int getAccessLevelFromToken(String token) {
         try {
             Algorithm algorithm = buildAlgorithm();
-            Integer accessLevel = JWT.require(algorithm)
-                .withIssuer("Penelope-API")
-                .build()
-                .verify(token)
-                .getClaim("accessLevel")
-                .asInt();
+            var claim = JWT.require(algorithm)
+                    .withIssuer("Penelope-API")
+                    .build()
+                    .verify(token)
+                    .getClaim("accessLevel");
+
+            Integer accessLevel = claim.asInt();
+
+            if (accessLevel == null) {
+                String accessLevelStr = claim.asString();
+                if (accessLevelStr != null) {
+                    try {
+                        accessLevel = Integer.parseInt(accessLevelStr);
+                    } catch (NumberFormatException e) {
+                        throw new InvalidCredentialsException();
+                    }
+                }
+            }
 
             if (accessLevel == null) {
                 throw new InvalidCredentialsException();

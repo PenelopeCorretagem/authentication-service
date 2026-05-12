@@ -1,6 +1,5 @@
 package penelope.corretagem.authservice.infrastructure.adapter;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -10,9 +9,6 @@ import penelope.corretagem.authservice.core.gateway.IEmailGateway;
 public class EmailGatewayAdapter implements IEmailGateway {
 
     private final JavaMailSender mailSender;
-
-    @Value("${app.frontend.url}")
-    private String frontendUrl;
 
     public EmailGatewayAdapter(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -26,10 +22,10 @@ public class EmailGatewayAdapter implements IEmailGateway {
         message.setSubject("Seu Token de Redefinicao de Senha");
 
         String emailBody = String.format(
-            "Ola,\n\n" +
-                "Você solicitou a redefinição de sua senha.\n\n" +
-                "Codigo de verificacao: %s\n\n" +
-                "O código irá expira em 1 hora.\n\n" +
+            "Olá,\n\n" +
+                "Você solicitou a redefinição de senha.\n\n" +
+                "Código de verificação: %s\n\n" +
+                "O código irá expirar em 1 hora.\n\n" +
                 "Se você não solicitou isso, desconsidere este e-mail.\n\n" +
                 "Atenciosamente,\nEquipe Penélope",
             token
