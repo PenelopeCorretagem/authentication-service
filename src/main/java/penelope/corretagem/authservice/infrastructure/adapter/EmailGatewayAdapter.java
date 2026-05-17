@@ -1,6 +1,5 @@
 package penelope.corretagem.authservice.infrastructure.adapter;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -11,35 +10,24 @@ public class EmailGatewayAdapter implements IEmailGateway {
 
     private final JavaMailSender mailSender;
 
-    @Value("${app.frontend.url}")
-    private String frontendUrl;
-
     public EmailGatewayAdapter(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     @Override
     public void sendPasswordResetEmail(String toEmail, String token) {
-        String resetUrl = frontendUrl + "/verificacao?token=" + token;
-        String manualUrl = frontendUrl + "/verificacao";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("Seu Token de Redefinicao de Senha");
 
         String emailBody = String.format(
-            "Ola,\n\n" +
-                "Voce solicitou a redefinicao de sua senha.\n\n" +
-                "Clique no link abaixo para ir diretamente para a pagina de verificacao:\n" +
-                "%s\n\n" +
-                "Se o link acima nao funcionar, acesse manualmente o endereco abaixo e insira o token:\n" +
-                "%s\n\n" +
-                "Codigo de verificacao: %s\n\n" +
-                "Este link e codigo expiram em 1 hora.\n\n" +
-                "Se voce nao solicitou isso, ignore este e-mail.\n\n" +
-                "Atenciosamente,\nEquipe Penelope",
-            resetUrl,
-            manualUrl,
+            "Olá,\n\n" +
+                "Você solicitou a redefinição de senha.\n\n" +
+                "Código de verificação: %s\n\n" +
+                "O código irá expirar em 1 hora.\n\n" +
+                "Se você não solicitou isso, desconsidere este e-mail.\n\n" +
+                "Atenciosamente,\nEquipe Penélope",
             token
         );
 

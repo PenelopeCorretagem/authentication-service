@@ -29,9 +29,9 @@ public class AuthenticateUserUseCase {
             throw new InvalidCredentialsException();
         }
 
-        String role = user.getAccessLevel().name();
-        String token = tokenGateway.generateToken(user.getEmail(), role);
+        int accessLevelCode = user.getAccessLevel().getCode();
+        String token = tokenGateway.generateToken(user.getEmail(), accessLevelCode);
 
-        return new LoginResponse(token, user.getId(), user.getAccessLevel().toString());
+        return new LoginResponse(token, user.getId(), accessLevelCode);
     }
 }

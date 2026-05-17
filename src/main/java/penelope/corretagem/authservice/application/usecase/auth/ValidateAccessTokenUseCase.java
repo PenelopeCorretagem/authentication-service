@@ -13,7 +13,7 @@ public class ValidateAccessTokenUseCase {
 
     public ValidateAccessTokenResponse execute(String token) {
         String email = tokenGateway.getEmailFromToken(token);
-        String accessLevel = tokenGateway.getAccessLevelFromToken(token);
+        int accessLevel = tokenGateway.getAccessLevelFromToken(token);
 
         return new ValidateAccessTokenResponse(email, accessLevel);
     }
