@@ -15,6 +15,6 @@ public class ValidateAccessTokenUseCase {
         String email = tokenGateway.getEmailFromToken(token);
         int accessLevel = tokenGateway.getAccessLevelFromToken(token);
 
-        return new ValidateAccessTokenResponse(email, accessLevel);
+        return new ValidateAccessTokenResponse(email, penelope.corretagem.authservice.core.user.valueobject.AccessLevel.fromCode(accessLevel).getDisplayName());
     }
 }
