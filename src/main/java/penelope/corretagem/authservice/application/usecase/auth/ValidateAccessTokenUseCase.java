@@ -1,6 +1,8 @@
 package penelope.corretagem.authservice.application.usecase.auth;
 
 import penelope.corretagem.authservice.application.dto.ValidateAccessTokenResponse;
+import penelope.corretagem.authservice.core.exception.InvalidCredentialsException;
+import penelope.corretagem.authservice.core.user.valueobject.AccessLevel;
 import penelope.corretagem.authservice.core.gateway.ITokenGateway;
 
 public class ValidateAccessTokenUseCase {
@@ -14,7 +16,11 @@ public class ValidateAccessTokenUseCase {
     public ValidateAccessTokenResponse execute(String token) {
         String email = tokenGateway.getEmailFromToken(token);
         int accessLevel = tokenGateway.getAccessLevelFromToken(token);
-
-        return new ValidateAccessTokenResponse(email, accessLevel);
+        try {
+            AccessLevel level = AccessLevel.fromCode(accessLevel);
+            return new ValidateAccessTokenResponse(email, accessLevel, level.getDescription());
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidCredentialsException();
+        }
     }
 }
