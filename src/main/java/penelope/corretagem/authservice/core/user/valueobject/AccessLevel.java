@@ -20,10 +20,6 @@ public enum AccessLevel {
         return description;
     }
 
-    public String getDisplayName() {
-        return description;
-    }
-
     public static AccessLevel fromCode(int code) {
         for (AccessLevel value : values()) {
             if (value.code == code) {
