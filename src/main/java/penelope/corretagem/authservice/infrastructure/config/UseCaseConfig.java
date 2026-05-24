@@ -23,9 +23,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ValidateAccessTokenUseCase validateAccessTokenUseCase(ITokenGateway tokenGateway,
-                                                                 IUserRepository userRepository) {
-        return new ValidateAccessTokenUseCase(tokenGateway, userRepository);
+    public ValidateAccessTokenUseCase validateAccessTokenUseCase(ITokenGateway tokenGateway) {
+        return new ValidateAccessTokenUseCase(tokenGateway);
     }
 
     @Bean

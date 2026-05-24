@@ -21,13 +21,14 @@ public class TokenGatewayAdapter implements ITokenGateway {
     private String secret;
 
     @Override
-    public String generateToken(String email, int accessLevelCode) {
+    public String generateToken(String email, Long userId, int accessLevelCode) {
         try {
             Algorithm algorithm = buildAlgorithm();
 
             return JWT.create()
                 .withIssuer("Penelope-API")
                 .withSubject(email)
+                .withClaim("userId", userId)
                 .withClaim("accessLevel", accessLevelCode)
                 .withExpiresAt(generateExpirationDate())
                 .sign(algorithm);
@@ -81,6 +82,36 @@ public class TokenGatewayAdapter implements ITokenGateway {
             }
 
             return accessLevel;
+        } catch (IntegrationException exception) {
+            throw exception;
+        } catch (JWTVerificationException | IllegalArgumentException exception) {
+            throw new InvalidCredentialsException();
+        }
+    }
+
+    @Override
+    public Long getUserIdFromToken(String token) {
+        try {
+            Algorithm algorithm = buildAlgorithm();
+            var claim = JWT.require(algorithm)
+                    .withIssuer("Penelope-API")
+                    .build()
+                    .verify(token)
+                    .getClaim("userId");
+
+            Long userId = claim.asLong();
+            if (userId == null) {
+                Integer intUserId = claim.asInt();
+                if (intUserId != null) {
+                    userId = intUserId.longValue();
+                }
+            }
+
+            if (userId == null) {
+                throw new InvalidCredentialsException();
+            }
+
+            return userId;
         } catch (IntegrationException exception) {
             throw exception;
         } catch (JWTVerificationException | IllegalArgumentException exception) {
