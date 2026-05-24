@@ -35,8 +35,7 @@ public class AuthenticateUserUseCase {
         return new LoginResponse(
             token,
             user.getId(),
-            user.getAccessLevel().getCode(),
-            user.getAccessLevel().getDescription()
+            user.getAccessLevel().toExternalValue()
         );
     }
 }
