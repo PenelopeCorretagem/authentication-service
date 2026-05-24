@@ -16,9 +16,10 @@ public class ValidateAccessTokenUseCase {
     public ValidateAccessTokenResponse execute(String token) {
         String email = tokenGateway.getEmailFromToken(token);
         int accessLevel = tokenGateway.getAccessLevelFromToken(token);
+        Long userId = tokenGateway.getUserIdFromToken(token);
         try {
             AccessLevel level = AccessLevel.fromCode(accessLevel);
-            return new ValidateAccessTokenResponse(email, accessLevel, level.getDescription());
+            return new ValidateAccessTokenResponse(email, userId, accessLevel, level.toExternalValue(), level.getDescription());
         } catch (IllegalArgumentException ex) {
             throw new InvalidCredentialsException();
         }

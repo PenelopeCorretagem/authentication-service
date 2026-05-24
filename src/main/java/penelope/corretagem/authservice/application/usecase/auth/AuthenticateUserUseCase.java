@@ -30,12 +30,13 @@ public class AuthenticateUserUseCase {
         }
 
         int accessLevelCode = user.getAccessLevel().getCode();
-        String token = tokenGateway.generateToken(user.getEmail(), accessLevelCode);
+        String token = tokenGateway.generateToken(user.getEmail(), user.getId(), accessLevelCode);
 
         return new LoginResponse(
             token,
             user.getId(),
             accessLevelCode,
+            user.getAccessLevel().toExternalValue(),
             user.getAccessLevel().getDescription()
         );
     }

@@ -131,7 +131,7 @@ Response `200`:
 {
 	"token": "<jwt>",
 	"id": 1,
-	"accessLevel": "CLIENTE"
+	"accessLevel": "cliente"
 }
 ```
 
@@ -208,10 +208,11 @@ Response `200`:
 
 ## Niveis de acesso
 
-Enum atual:
+Valores externos atuais:
 
-- `ADMINISTRADOR`
-- `CLIENTE`
+- `administrador`
+- `corretor`
+- `cliente`
 
 ## Padrao de erro da API
 
